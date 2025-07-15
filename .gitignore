@@ -1,0 +1,17 @@
+# Python
+*.pyc
+__pycache__/
+
+# Django
+*.sqlite3
+
+# VS Code
+.vscode/
+
+# Virtualenvs
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
