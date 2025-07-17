@@ -17,13 +17,18 @@ def run_queries():
     # 2. List all books in a library
     library_name = "Central Library"
     try:
-        library = Library.objects.get(name=library_name)
+    library = Library.objects.get(name=library_name)
+    try:
         books_in_library = library.books.all()
-        print(f"\nBooks in {library_name}:")
-        for book in books_in_library:
-            print(f"- {book.title}")
+    except AttributeError:
+        books_in_library = library.book_set.all()
+
+    print(f"\nBooks in {library_name}:")
+    for book in books_in_library:
+        print(f"- {book.title}")
     except Library.DoesNotExist:
-        print(f"No library named '{library_name}' found.")
+    print(f"No library named '{library_name}' found.")
+    
 
     # 3. Retrieve the librarian for a library
     try:
