@@ -1,3 +1,4 @@
+
 """
 URL configuration for LibraryProject project.
 
@@ -20,4 +21,13 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('relationship_app.urls')),
+]
+
+from django.contrib.auth.views import LoginView, LogoutView
+from .views import register  # assuming you have a register view
+
+urlpatterns = [
+    path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),
+    path('register/', register, name='register'),
 ]
