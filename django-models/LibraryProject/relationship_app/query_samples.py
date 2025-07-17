@@ -17,14 +17,14 @@ def run_queries():
     # 2. List all books in a library
     library_name = "Central Library"
     try:
-    library = Library.objects.get(name=library_name)
-    try:
+     library = Library.objects.get(name=library_name)
+     try:
         books_in_library = library.books.all()
-    except AttributeError:
+     except AttributeError:
         books_in_library = library.book_set.all()
 
-    print(f"\nBooks in {library_name}:")
-    for book in books_in_library:
+     print(f"\nBooks in {library_name}:")
+     for book in books_in_library:
         print(f"- {book.title}")
     except Library.DoesNotExist:
     print(f"No library named '{library_name}' found.")
