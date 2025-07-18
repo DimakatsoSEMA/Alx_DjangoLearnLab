@@ -1,61 +1,64 @@
-from django.shortcuts import render
-from .models import Book
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.generic.detail import DetailView
 
+from .models import Book, Library
+
+# Book list view
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
-from django.views.generic.detail import DetailView
-from .models import Library
-
+# Library detail view
 class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-# relationship_app/views.py
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from django.contrib.auth.views import LoginView, LogoutView
-
+# User registration
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # log the user in after registration
-            return redirect('list_books')  # or any page you want after login
+            login(request, user)
+            return redirect('list_books')
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# Optionally, if you want to customize login/logout views, subclass them:
+# Custom login/logout views
 class CustomLoginView(LoginView):
     template_name = 'relationship_app/login.html'
 
 class CustomLogoutView(LogoutView):
     template_name = 'relationship_app/logout.html'
-# relationship_app/views.py
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
-from django.contrib.auth.views import LoginView, LogoutView
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)  # log the user in after registration
-            return redirect('list_books')  # or any page you want after login
-    else:
-        form = UserCreationForm()
-    return render(request, 'relationship_app/register.html', {'form': form})
+# Role check helpers
+def is_admin(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
 
-# Optionally, if you want to customize login/logout views, subclass them:
-class CustomLoginView(LoginView):
-    template_name = 'relationship_app/login.html'
+def is_librarian(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
 
-class CustomLogoutView(LogoutView):
-    template_name = 'relationship_app/logout.html'
+def is_member(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+
+# Role-based views
+@login_required
+@user_passes_test(is_admin)
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+@login_required
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+@login_required
+@user_passes_test(is_member)
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
