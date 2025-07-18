@@ -1,11 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import (
+    login_required,
+    user_passes_test,
+    permission_required
+)
 from django.views.generic.detail import DetailView
-from .forms import BookForm
 
+from .forms import BookForm
 from .models import Book, Library
 
 # Book list view
@@ -64,7 +68,7 @@ def librarian_view(request):
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
-
+# Book CRUD Views with Permissions
 @permission_required('relationship_app.can_add_book')
 def add_book(request):
     if request.method == 'POST':
@@ -92,4 +96,3 @@ def delete_book(request, pk):
         book.delete()
         return redirect('list_books')
     return render(request, 'relationship_app/confirm_delete.html', {'book': book})
-
