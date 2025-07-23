@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import permission_required
 from django.views.generic.detail import DetailView
 
 from .forms import BookForm
-from .models import Book, Library
+from .models import Book
+from .models import Library
 
 # Book list view
 def list_books(request):
