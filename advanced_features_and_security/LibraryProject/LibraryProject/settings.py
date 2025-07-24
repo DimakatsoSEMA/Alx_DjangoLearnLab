@@ -143,6 +143,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Enforce HTTPS: Redirect all HTTP requests to HTTPS
 SECURE_SSL_REDIRECT = True  # Redirect non-HTTPS to HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # HTTP Strict Transport Security (HSTS): Instruct browsers to always use HTTPS
 SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
