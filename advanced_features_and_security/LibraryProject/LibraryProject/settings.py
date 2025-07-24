@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'relationship_app',
+    'csp',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -137,11 +139,26 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# HTTPS-only cookies (requires HTTPS)
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# SECURITY SETTINGS FOR PRODUCTION - HTTPS ENFORCEMENT AND HEADERS
 
-# Recommended for HTTPS
-SECURE_SSL_REDIRECT = True  # Force HTTPS
+# Enforce HTTPS: Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  # Redirect non-HTTPS to HTTPS
 
+# HTTP Strict Transport Security (HSTS): Instruct browsers to always use HTTPS
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow domain to be included in browser preload lists
 
+# Ensure cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True  # Session cookies transmitted only via HTTPS
+CSRF_COOKIE_SECURE = True     # CSRF cookies transmitted only via HTTPS
+
+# Security Headers to prevent attacks
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser XSS protection
+X_FRAME_OPTIONS = 'DENY'          # Prevent clickjacking by disallowing framing
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-sniffing
+
+# Content Security Policy (CSP): Limits sources for content
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'fonts.googleapis.com')
+CSP_SCRIPT_SRC = ("'self'", 'ajax.googleapis.com')
