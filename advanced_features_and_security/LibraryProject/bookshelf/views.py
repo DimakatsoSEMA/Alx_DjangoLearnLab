@@ -22,3 +22,7 @@ def delete_book(request, book_id):
     # handle delete logic
     pass
 
+form = BookForm(request.POST)
+if form.is_valid():
+    form.save()
+
