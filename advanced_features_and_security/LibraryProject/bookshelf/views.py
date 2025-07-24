@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, get_object_or_404
 from .models import Book
-from .froms import ExampleForm 
+from .forms import ExampleForm 
 
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
@@ -23,7 +23,14 @@ def delete_book(request, book_id):
     # handle delete logic
     pass
 
-form = BookForm(request.POST)
-if form.is_valid():
-    form.save()
 
+
+def example_form_view(request):
+    form = ExampleForm(request.POST or None)
+    if form.is_valid():
+        # Handle the form data safely here
+        name = form.cleaned_data['name']
+        email = form.cleaned_data['email']
+        message = form.cleaned_data['message']
+        # ... e.g., save to DB, send email, etc.
+    return render(request, 'bookshelf/form_example.html', {'form': form})
