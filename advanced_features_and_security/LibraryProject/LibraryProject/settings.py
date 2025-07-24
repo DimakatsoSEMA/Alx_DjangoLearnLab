@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*&f++gr-@yefejh@7divu79iud4vo5*%lqqd+azynmm&v-&#rt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# Allow only trusted hosts in production
+ALLOWED_HOSTS = ['yourdomain.com', '127.0.0.1']
 
 
 # Application definition
@@ -131,5 +132,16 @@ LOGOUT_REDIRECT_URL = '/login/'
 #new update
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
+# Security Headers
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# HTTPS-only cookies (requires HTTPS)
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Recommended for HTTPS
+SECURE_SSL_REDIRECT = True  # Force HTTPS
 
 
