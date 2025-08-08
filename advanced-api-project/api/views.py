@@ -2,14 +2,16 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .models import Book
 from .serializers import BookSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
-# ✅ List all books (accessible to anyone)
+
+#List all books (accessible to anyone)
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.AllowAny]
 
-# ✅ Retrieve a single book by ID (accessible to anyone)
+#Retrieve a single book by ID (accessible to anyone)
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
