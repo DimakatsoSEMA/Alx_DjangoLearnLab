@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.shortcuts import get_object_or_404, redirect
 from .models import Post, Comment
 from .forms import CommentForm
-
+from django.db.models import Q
 
 # Extend UserCreationForm to add email
 class CustomUserCreationForm(UserCreationForm):
@@ -84,6 +84,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return redirect('post-detail', pk=post_pk)
     return redirect('post-detail', pk=comment.post.pk)
 
+#Comments 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
@@ -113,3 +114,15 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+    
+#Search functionality
+def search_posts(request):
+    query = request.GET.get('q')
+    results = Post.objects.none()
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)  # if using django-taggit or M2M
+        ).distinct()
+    return render(request, 'blog/search_results.html', {'results': results, 'query': query})    
