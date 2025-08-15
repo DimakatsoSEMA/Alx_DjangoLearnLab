@@ -126,3 +126,7 @@ def search_posts(request):
             Q(tags__name__icontains=query)  # if using django-taggit or M2M
         ).distinct()
     return render(request, 'blog/search_results.html', {'results': results, 'query': query})    
+
+def posts_by_tag(request, tag_name):
+    posts = Post.objects.filter(tags__name=tag_name)
+    return render(request, 'blog/post_list.html', {'posts': posts, 'tag_name': tag_name})
