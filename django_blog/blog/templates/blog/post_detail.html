@@ -31,3 +31,11 @@
     <p><a href="{% url 'login' %}">Log in</a> to comment.</p>
 {% endif %}
 
+<p>Tags:
+{% for tag in object.tags.all %}
+    <a href="{% url 'posts-by-tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+{% empty %}
+    No tags
+{% endfor %}
+</p>
+
