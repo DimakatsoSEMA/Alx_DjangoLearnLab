@@ -20,8 +20,8 @@ urlpatterns = [
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
     # Comment URLs
-    path('post/<int:post_id>/comments/new/', views.add_comment, name='comment-add'),  # note singular 'post'
-    path('comment/<int:comment_id>/update/', views.edit_comment, name='comment-update'),  # renamed to match your view
-    path('comment/<int:comment_id>/delete/', views.delete_comment, name='comment-delete'),  # renamed to match your view
+    path('post/<int:pk>/comments/new/', views.add_comment, name='comment-add'),  # note singular 'post'
+    path('comment/<int:pk>/update/', views.edit_comment, name='comment-update'),  # renamed to match your view
+    path('comment/<int:pk>/delete/', views.delete_comment, name='comment-delete'),  # renamed to match your view
 ]
 
