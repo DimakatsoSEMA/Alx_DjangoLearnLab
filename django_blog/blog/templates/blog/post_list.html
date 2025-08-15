@@ -5,3 +5,9 @@
     <small>By {{ post.author }} on {{ post.date_posted }}</small>
 {% endfor %}
 
+{% if tag_name %}
+<h2>Posts tagged with "{{ tag_name }}"</h2>
+{% else %}
+<h2>All Posts</h2>
+{% endif %}
+
