@@ -45,10 +45,10 @@ class LikePostView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        like, created = Like.objects.get_or_create(post=post, user=request.user)
+        post = generics.get_object_or_404(Post, pk=pk)  
+        like, created = Like.objects.get_or_create(user=request.user, post=post)  
         if created:
-            create_notification(
+            Notification.objects.create(  
                 recipient=post.author,
                 actor=request.user,
                 verb="liked your post",
